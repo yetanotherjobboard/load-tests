@@ -15,6 +15,8 @@ class AdvertGeneratorConfigProps {
 
   @Setter Target target;
   @Setter Tenant tenant;
+  @Setter OidcConfig oidc;
+  @Setter UserCredentials user;
 
   @PostConstruct
   void postConstruct() {
@@ -41,5 +43,19 @@ class AdvertGeneratorConfigProps {
     }
   }
 
+  @ToString
+  @Setter
+  static class OidcConfig {
+    String tokenEndpoint;
+    String clientId;
+    String clientSecret;
+  }
+
+  @ToString
+  @Setter
+  static class UserCredentials {
+    String username;
+    String password;
+  }
 
 }

@@ -1,8 +1,19 @@
 advertgenerator:
   target:
-    scheme: https
-    host: yajb-api-gateway.fly.dev
-    port: 80
+    scheme: http
+    host: localhost
+    port: 8000
   tenant:
     id: reeljobs
     secret: reeljobs
+  oidc:
+    token-endpoint: http://localhost:10000/realms/yajb-realm/protocol/openid-connect/token
+    client-id: yajb-test
+    client-secret: keycloak-ignores-this
+  user:
+    username: trafficgenerator@yajb.com
+    password: password
+
+
+  logging:
+    pattern.console: "%-5level : %msg%n%wEx"
