@@ -1,0 +1,8 @@
+advertgenerator:
+  target:
+    scheme: https
+    host: yajb-api-gateway.fly.dev
+    port: 80
+  tenant:
+    id: reeljobs
+    secret: reeljobs
