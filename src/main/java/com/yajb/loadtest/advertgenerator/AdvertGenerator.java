@@ -60,23 +60,23 @@ class AdvertGenerator {
     GenerationLoop run() {
       log.info("will generate {} adverts", availableSlots);
       startTime = System.currentTimeMillis();
-      IntStream.range(1, availableSlots).forEach(i -> tryToPublishRandomAdvert());
+      IntStream.range(1, availableSlots).forEach(i -> tryToPublishRandomAdvert(i, availableSlots));
       endTime = System.currentTimeMillis();
       return this;
     }
 
-    void tryToPublishRandomAdvert() {
+    void tryToPublishRandomAdvert(int counter, int total) {
       try {
-        publishRandomAdvert();
+        publishRandomAdvert(counter, total);
       } catch (Exception e) {
         log.error("exception while publishing", e);
         errorCount++;
       }
     }
 
-    void publishRandomAdvert() throws ApiException {
+    void publishRandomAdvert(int counter, int total) throws ApiException {
       JobAdvertDraft randomAdvert = AdvertBuilder.randomAd(staticConfig);
-      log.info("Drafting  '{}'", randomAdvert.getDetails().getTitle());
+      log.info("Drafting [{}/{}] : '{}'", counter, total, randomAdvert.getDetails().getTitle());
       var advertId = accountApi.createJobAdvert(cfg.tenant.token, randomAdvert).getId();
       log.info("Publishing");
       accountApi.publishJobAdvert(
