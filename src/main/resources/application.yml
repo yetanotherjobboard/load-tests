@@ -1,8 +1,7 @@
 advertgenerator:
   target:
     scheme: http
-    host: localhost
-    port: 8000
+    host: localhost:8000
   tenant:
     id: reeljobs
     secret: reeljobs

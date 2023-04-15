@@ -139,7 +139,7 @@ class AdvertBuilder {
         .contractTypes(Set.of(pickOne(List.of(ContractType.values()))))
         .workLocation(pickOne(List.of(WorkLocation.values())))
         .videoLocation(video)
-        .officeLocation(pickOne(officeLocations.get(company)))
+        .officeLocation(pickOne(officeLocations.get(company.getName())))
         .contactEmail(null);
 
     return new JobAdvertDraft()
@@ -378,19 +378,19 @@ class AdvertBuilder {
       List<Company> ALL = List.of(januszex, donkeyballs, acme, hookerfurniture, tequilamockingbird);
     }
 
-    Map<Company, List<GeoLocation>> officeLocations = Map.of(
-        januszex, List.of(
+    Map<String, List<GeoLocation>> officeLocations = Map.of(
+        januszex.getName(), List.of(
             geo("Kozia Wólka", 53.9205661,19.8517622),
             geo("Bełchatów", 51.39391653438096, 19.370107445515238),
             geo("Kalisz", 51.7830404304157, 18.095792548165456),
             geo("Gorlitz", 51.15247718476542, 14.969228768391387)
         ),
-        donkeyballs, List.of(
+        donkeyballs.getName(), List.of(
             geo("Prague", 50.09040047969781, 14.425790045783868),
             geo("Denver", 39.720194475155814, -104.99939932989919),
             geo("Valencia", 39.55820454526369, -0.4291489098831155)
         ),
-        acme, List.of(
+        acme.getName(), List.of(
             geo("Malaga", 36.80471606148292, -4.418471602023769),
             geo("Wyskok", 51.15975112819496, 15.935364447956925),
             geo("Madrid", 40.436454742481025, -3.7221536792462353),
@@ -401,13 +401,13 @@ class AdvertBuilder {
             geo("Kielce", 50.91902869921697, 20.632786200150406),
             geo("London", 51.57321203387039, -0.1487170082714032)
         ),
-        hookerfurniture, List.of(
+        hookerfurniture.getName(), List.of(
             geo("Vienna", 48.293940339403306, 16.44664397099485),
             geo("Katowice", 50.29561167590756, 18.723905313561158),
             geo("Genoa", 44.53257762827692, 8.989729392329334),
             geo("Zagreb", 45.91627326757985, 16.022448304615587)
         ),
-        tequilamockingbird, List.of(
+        tequilamockingbird.getName(), List.of(
             geo("San Marino", 43.956812725361274, 12.439110589153513),
             geo("Bilbao", 43.33483037102203, -2.910077176843034),
             geo("Zurich", 47.477704080326795, 8.566581034414087),

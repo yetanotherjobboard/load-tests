@@ -28,7 +28,6 @@ class AdvertGeneratorConfigProps {
   static class Target {
     String scheme;
     String host;
-    int port;
   }
 
   @ToString

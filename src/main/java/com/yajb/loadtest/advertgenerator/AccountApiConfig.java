@@ -9,11 +9,10 @@ import yajb.com.client.account.invoker.ApiClient;
 class AccountApiConfig {
 
   @Bean
-  ApiClient accountApiCLient(AdvertGeneratorConfigProps cfg, UserTokenHolder credentials) {
+  ApiClient accountApiClient(AdvertGeneratorConfigProps cfg, UserTokenHolder credentials) {
     return new ApiClient()
         .setScheme(cfg.target.scheme)
         .setHost(cfg.target.host)
-        .setPort(cfg.target.port)
         .setRequestInterceptor(b -> b.header("Authorization", "Bearer " + credentials.idToken))
         ;
   }

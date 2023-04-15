@@ -2,14 +2,13 @@ advertgenerator:
   target:
     scheme: https
     host: yajb-api-gateway.fly.dev
-    port: 80
   tenant:
     id: reeljobs
-    secret: [INJECT]
+    secret: reeljobs
   oidc:
     token-endpoint: https://yetanotherjobboard.eu.auth0.com/oauth/token
     client-id: kHOgCKg98UI66seLJ6ArQSkgDx3OyljC
-    client-secret: [INJECT]
+    client-secret: CHANGEME
   user:
     username: trafficgenerator@yajb.com
-    password: [INJECT]
+    password: CHANGEME

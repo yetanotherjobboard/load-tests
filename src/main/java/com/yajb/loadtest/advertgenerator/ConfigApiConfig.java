@@ -9,13 +9,10 @@ import yajb.com.client.config.invoker.ApiClient;
 class ConfigApiConfig {
 
   @Bean
-  ApiClient configApiCLient(AdvertGeneratorConfigProps cfg) {
+  ApiClient configApiClient(AdvertGeneratorConfigProps cfg) {
     return new ApiClient()
         .setScheme(cfg.target.scheme)
-        .setHost(cfg.target.host)
-        .setPort(cfg.target.port);
-//        .setRequestInterceptor(b -> b.)
-
+        .setHost(cfg.target.host);
   }
 
   @Bean

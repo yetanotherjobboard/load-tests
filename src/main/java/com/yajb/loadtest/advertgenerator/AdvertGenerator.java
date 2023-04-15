@@ -2,6 +2,9 @@ package com.yajb.loadtest.advertgenerator;
 
 
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,6 +32,8 @@ class AdvertGenerator {
 
   @SneakyThrows
   void run() {
+    testConnection();
+
     log.info("fetching static config");
     var staticConfig = configApi.staticConfig(cfg.tenant.token);
 
@@ -46,6 +51,19 @@ class AdvertGenerator {
     ;
 
 
+  }
+
+  @SneakyThrows
+  private void testConnection() {
+    HttpRequest req = HttpRequest
+            .newBuilder(URI.create("%s://%s/ee-service/actuator/health".formatted(cfg.target.scheme, cfg.target.host)))
+            .GET()
+            .build();
+
+    HttpResponse<String> resp = HttpClient.newHttpClient()
+            .send(req, HttpResponse.BodyHandlers.ofString());
+
+    log.info("connection check : {} : {}", resp, resp.body());
   }
 
   @RequiredArgsConstructor
