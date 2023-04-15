@@ -1,25 +1,26 @@
 package com.yajb.loadtest.advertgenerator;
 
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.Companies.acme;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.Companies.donkeyballs;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.Companies.hookerfurniture;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.Companies.januszex;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.Companies.tequilamockingbird;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.benefits;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.benefits_scope;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.hourlyRateFactor;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.names;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.officeLocations;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.responsibilities_noun;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.responsibilities_verb;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.skills_adj;
-import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.videos;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.Companies.acme;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.Companies.donkeyballs;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.Companies.hookerfurniture;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.Companies.januszex;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.Companies.tequilamockingbird;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.benefits;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.benefits_scope;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.hourlyRateFactor;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.names;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.officeLocations;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.responsibilities_noun;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.responsibilities_verb;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.skills_adj;
+import static com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.videos;
 import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Randomizer.pickOne;
 import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Randomizer.rnd;
 import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Randomizer.withProbability;
+import static java.util.Arrays.asList;
 import static java.util.stream.IntStream.rangeClosed;
 
-import com.yajb.loadtest.advertgenerator.AdvertBuilder.Data.Companies;
+import com.yajb.loadtest.advertgenerator.AdvertBuilder.GenerationData.Companies;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import yajb.com.client.account.model.WorkLocation;
 import yajb.com.client.config.model.StaticConfig;
 
 @RequiredArgsConstructor
+public
 class AdvertBuilder {
 
   final StaticConfig staticConfig;
@@ -71,8 +73,8 @@ class AdvertBuilder {
     withProbability(
         5,
         () -> description.add("(%s, please check and proofread before posting)".formatted(pickOne(names))));
-    description.add(pickOne(Data.headings_first_line).formatted(company.getName()));
-    description.add(pickOne(Data.headings_second_line));
+    description.add(pickOne(GenerationData.headings_first_line).formatted(company.getName()));
+    description.add(pickOne(GenerationData.headings_second_line));
     return this;
   }
 
@@ -121,7 +123,7 @@ class AdvertBuilder {
       int minHourlyRate = (int) rnd(50, 45);
       int maxHourlyRate = (int) rnd(200, 100);
       salaryBands = new SalaryBands()
-          .currency(pickOne(Data.currencies))
+          .currency(pickOne(GenerationData.currencies))
           .period(pickOne(List.of(SalaryPeriod.values())))
           .min(minHourlyRate * hourlyRateFactor.get(pickOne(List.of(SalaryPeriod.values()))))
           .max(maxHourlyRate * hourlyRateFactor.get(pickOne(List.of(SalaryPeriod.values()))));
@@ -134,7 +136,8 @@ class AdvertBuilder {
         .company(company)
         .roleType(pickOne(staticConfig.getRoleTypes()))
         .seniorityLevel(pickOne(staticConfig.getSeniorityLevels()))
-        .title(String.join(" ", pickOne(Data.jobLevels), pickOne(Data.jobs), pickOne(Data.jobTypes)))
+        .title(String.join(" ", pickOne(GenerationData.jobLevels), pickOne(GenerationData.jobs), pickOne(
+            GenerationData.jobTypes)))
         .salaryBands(salaryBands)
         .contractTypes(Set.of(pickOne(List.of(ContractType.values()))))
         .workLocation(pickOne(List.of(WorkLocation.values())))
@@ -148,7 +151,7 @@ class AdvertBuilder {
         .applyLink(company.getWebsiteUrl() + "/jobs");
   }
 
-  interface Data {
+  public interface GenerationData {
 
     Map<SalaryPeriod, Integer> hourlyRateFactor =
         Map.of(
@@ -459,7 +462,7 @@ class AdvertBuilder {
     }
   }
 
-  interface Randomizer {
+  public interface Randomizer {
     Random random = new Random();
 
     static long rnd(long mid, long plusMinus) {
@@ -467,6 +470,10 @@ class AdvertBuilder {
     }
     static <T> T pickOne(List<T> ads) {
       return ads.get(random.nextInt(ads.size()));
+    }
+
+    static <T> T pickOne(T[] ads) {
+      return pickOne(asList(ads));
     }
 
     static void withProbability(int percent, Runnable codeBlock) {

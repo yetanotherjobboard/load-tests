@@ -7,6 +7,7 @@ plugins {
     id("io.freefair.lombok") version "8.0.1"
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
+    id("io.gatling.gradle") version "3.9.3.1"
 
     //workaround for https://github.com/OpenAPITools/openapi-generator/issues/8255
     id("de.undercouch.download") version "5.4.0"
@@ -14,7 +15,7 @@ plugins {
 
 val codeGenOutputDir = "$buildDir/generated/sources/clients"
 val openApiSpecVersion = "1.1"
-val requiredApis = listOf("config", "account")
+val requiredApis = listOf("config", "account", "search")
 
 fun openApiFileLocation(apiName: String) = "$buildDir/openapi-specs/$openApiSpecVersion/$apiName.yml"
 
@@ -95,4 +96,8 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+gatling {
+
 }
