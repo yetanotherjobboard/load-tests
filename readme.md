@@ -23,5 +23,6 @@
 
 ### run in docker
 - `docker pull eclipse-temurin:17-jdk`
-- `docker run --rm -v $(pwd):/workspace --workdir /workspace eclipse-temurin:17-jdk ./gradlew generateSources gatlingRun`
+- `docker run --rm -i -t -v $(pwd):/workspace --workdir /workspace eclipse-temurin:17-jdk bash`
+- inside docker container:`./gradlew generateSources gatlingRun`
 
