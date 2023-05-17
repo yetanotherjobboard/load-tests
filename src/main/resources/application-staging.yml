@@ -2,6 +2,7 @@ advertgenerator:
   target:
     scheme: https
     host: api-gateway-tvexvi6w2q-uc.a.run.app
+#    host: yajb-api-gateway.fly.dev
   tenant:
     id: reeljobs
     secret: reeljobs
@@ -12,4 +13,5 @@ advertgenerator:
   user:
     username: trafficgenerator@yajb.com
     password: CHANGEME
-  max-adverts-to-generate: 10000
+#  max-adverts-to-generate: 10000
+  max-adverts-to-generate: 100

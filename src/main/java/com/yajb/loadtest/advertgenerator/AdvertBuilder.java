@@ -438,7 +438,17 @@ class AdvertBuilder {
         video("S5rvJOcff_I", VideoType.YouTube),
         video("FQYTTMA90yg", VideoType.YouTube),
         video("Tj3IziSCsqo", VideoType.YouTube),
-        video("GBmHv84NM5o", VideoType.YouTube)
+        video("GBmHv84NM5o", VideoType.YouTube),
+        video("e9PQHzo5_TY", VideoType.YouTube),
+        video("0jps7LGJp8Y", VideoType.YouTube),
+        video("rMVtHHMis3o", VideoType.YouTube),
+        video("k6ATg_xQrLY", VideoType.YouTube),
+        video("BjE5qUXHyuQ", VideoType.YouTube),
+        video("HUvkEe2tOZk", VideoType.YouTube),
+        video("t_MzwM8tjAU", VideoType.YouTube),
+        video("-Xq_x0Kru0o", VideoType.YouTube),
+        video("EKIt74mhmZk", VideoType.YouTube),
+        video("lmcdTuciAlI", VideoType.YouTube)
     );
 
     static Video video(String videoId, VideoType type) {

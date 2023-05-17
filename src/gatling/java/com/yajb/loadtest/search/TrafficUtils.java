@@ -25,15 +25,16 @@ import yajb.com.client.search.model.WorkLocation;
 
 public interface TrafficUtils {
 
-  String API_BASE_URL = "https://api-gateway-tvexvi6w2q-uc.a.run.app";
 
   ObjectMapper jackson = new ObjectMapper();
   String TENANT_TOKEN = getEncoder().encodeToString("reeljobs:reeljobs".getBytes(UTF_8));
 
-  HttpProtocolBuilder TARGET = http
-      .baseUrl(API_BASE_URL)
+  static HttpProtocolBuilder target(String apiBaseUrl) {
+    return http
+      .baseUrl(apiBaseUrl)
       .header("yajb-tenant-token", TENANT_TOKEN)
       .contentTypeHeader("application/json");
+  }
 
   //verify if it matches  what's in SearchApi.java (local variable)
   String SEARCH_PATH = "/api/search/job-advert/query";
