@@ -5,6 +5,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -30,8 +33,10 @@ class AdvertGenerator {
   final AccountApi accountApi;
   final UserTokenHolder userTokenHolder;
 
+
+
   @SneakyThrows
-  void run() {
+  void generateAdverts() {
     testConnection();
 
     log.info("fetching static config");
@@ -45,67 +50,80 @@ class AdvertGenerator {
     Subscription subscription = userAccount.getSubscription();
     log.info("user's subscription: {}", subscription != null ? subscription.getPlan().getName() : "none");
 
-    new GenerationLoop(staticConfig, userAccount.getSlots().getAvailable())
+    var availableSlots = userAccount.getSlots().getAvailable();
+    var advertsToGenerate = Math.min(availableSlots, cfg.maxAdvertsToGenerate);
+    log.info("user has {} available slots. will generate {} adverts", availableSlots, advertsToGenerate);
+
+    new GenerationLoop(staticConfig, advertsToGenerate)
         .run()
         .printSummary()
     ;
-
-
   }
 
   @SneakyThrows
   private void testConnection() {
-    HttpRequest req = HttpRequest
+    var healthCheck = HttpRequest
             .newBuilder(URI.create("%s://%s/ee-service/actuator/health".formatted(cfg.target.scheme, cfg.target.host)))
             .GET()
             .build();
 
-    HttpResponse<String> resp = HttpClient.newHttpClient()
-            .send(req, HttpResponse.BodyHandlers.ofString());
+    var healthCheckResponse = HttpClient
+        .newHttpClient()
+        .send(healthCheck, HttpResponse.BodyHandlers.ofString());
 
-    log.info("connection check : {} : {}", resp, resp.body());
+    log.info("connection check : {} : {}", healthCheckResponse, healthCheckResponse.body());
   }
 
   @RequiredArgsConstructor
   class GenerationLoop {
     final StaticConfig staticConfig;
-    final int availableSlots;
+    final int advertsToGenerate;
+
+    final AtomicInteger errorCount = new AtomicInteger(0);
+    final AtomicInteger generatedCount = new AtomicInteger(0);
 
     long startTime;
     long endTime;
-    int errorCount;
 
+    @SneakyThrows
     GenerationLoop run() {
-      log.info("will generate {} adverts", availableSlots);
+      var executor = Executors.newFixedThreadPool(10);
+
+      log.info("will generate {} adverts", advertsToGenerate);
       startTime = System.currentTimeMillis();
-      IntStream.range(1, availableSlots).forEach(i -> tryToPublishRandomAdvert(i, availableSlots));
+      IntStream
+          .rangeClosed(1, advertsToGenerate)
+          .forEach(i -> executor.submit(this::tryToPublishRandomAdvert));
+
+      executor.shutdown();
+      executor.awaitTermination(1, TimeUnit.DAYS);
       endTime = System.currentTimeMillis();
       return this;
     }
 
-    void tryToPublishRandomAdvert(int counter, int total) {
+    void tryToPublishRandomAdvert() {
       try {
-        publishRandomAdvert(counter, total);
+        publishRandomAdvert();
       } catch (Exception e) {
         log.error("exception while publishing", e);
-        errorCount++;
+        errorCount.incrementAndGet();
       }
     }
 
-    void publishRandomAdvert(int counter, int total) throws ApiException {
+    void publishRandomAdvert() throws ApiException {
       JobAdvertDraft randomAdvert = AdvertBuilder.randomAd(staticConfig);
-      log.info("Drafting [{}/{}] : '{}'", counter, total, randomAdvert.getDetails().getTitle());
       var advertId = accountApi.createJobAdvert(cfg.tenant.token, randomAdvert).getId();
-      log.info("Publishing");
       accountApi.publishJobAdvert(
           cfg.tenant.token,
           advertId.getGuid(),
           new PublishAdvertRequest().continueUrl(IRRELEVANT_CONTINUE_URI));
+      int generated = generatedCount.incrementAndGet();
+      log.info("Generated [{}/{}] ads", generated, advertsToGenerate);
     }
 
     void printSummary() {
       log.info("Advert generation finished");
-      log.info("Time spent (seconds): {}", (endTime - startTime) / 1000);
+      log.info("Time spent (minutes): {}", (endTime - startTime) / 60_000);
       log.info("Error count: {}", errorCount);
     }
   }

@@ -31,11 +31,13 @@ import yajb.com.client.search.model.WorkLocation;
 @SuppressWarnings({"squid:S1171", "unused"})
 public class SearchLoadSimulation extends Simulation {
 
+  static final String API_BASE_URL = "https://api-gateway-tvexvi6w2q-uc.a.run.app";
+
   static final ObjectMapper jackson = new ObjectMapper();
   static final String TENANT_TOKEN = getEncoder().encodeToString("reeljobs:reeljobs".getBytes(UTF_8));
 
   static final HttpProtocolBuilder TARGET = http
-      .baseUrl("https://yajb-api-gateway.fly.dev")
+      .baseUrl(API_BASE_URL)
       .header("yajb-tenant-token", TENANT_TOKEN)
       .contentTypeHeader("application/json");
 

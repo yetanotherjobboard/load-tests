@@ -1,4 +1,5 @@
 advertgenerator:
+  max-adverts-to-generate: 10
   target:
     scheme: http
     host: localhost:8000
@@ -13,6 +14,5 @@ advertgenerator:
     username: trafficgenerator@yajb.com
     password: password
 
-
-  logging:
-    pattern.console: "%-5level : %msg%n%wEx"
+logging:
+  pattern.console: "%-5level : %msg%n%wEx"

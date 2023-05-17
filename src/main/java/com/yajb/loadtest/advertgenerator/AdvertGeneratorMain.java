@@ -11,9 +11,8 @@ public class AdvertGeneratorMain {
   public static void main(String... args) {
     SpringApplication
         .run(AdvertGeneratorMain.class, "--spring.profiles.active=staging")
-//        .run(AdvertGeneratorMain.class, "--spring.profiles.active=staging")
         .getBean(AdvertGenerator.class)
-        .run();
+        .generateAdverts();
   }
 
   @Bean

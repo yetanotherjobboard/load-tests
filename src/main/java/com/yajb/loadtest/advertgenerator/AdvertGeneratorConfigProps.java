@@ -17,6 +17,7 @@ class AdvertGeneratorConfigProps {
   @Setter Tenant tenant;
   @Setter OidcConfig oidc;
   @Setter UserCredentials user;
+  @Setter int maxAdvertsToGenerate;
 
   @PostConstruct
   void postConstruct() {
