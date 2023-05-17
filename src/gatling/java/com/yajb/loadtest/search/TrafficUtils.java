@@ -52,9 +52,9 @@ public interface TrafficUtils {
       .exec(callSearch(5))
       ;
 
-  static ScenarioBuilder searchLoop(int repeatTimes) {
+  static ScenarioBuilder searchLoop(String desc, int repeatTimes) {
     return CoreDsl
-        .scenario("search loop " + repeatTimes)
+        .scenario(desc)
         .repeat(repeatTimes)
         .on(BROWSE_FEW_PAGES_OF_SEARCH_RESULTS.pause(1));
   }
