@@ -17,4 +17,11 @@
 # run load tests
 
 - verify API_BASE_URL in [SearchLoadSimulation.java](src%2Fgatling%2Fjava%2Fcom%2Fyajb%2Floadtest%2Fsearch%2FSearchLoadSimulation.java)
+
+### run locally (requires jdk)
 - `gradlew gatlingRun`
+
+### run in docker
+- `docker pull eclipse-temurin:17-jdk`
+- `docker run --rm -v $(pwd):/workspace --workdir /workspace eclipse-temurin:17-jdk ./gradlew build gatlingRun`
+
