@@ -22,7 +22,7 @@ public class SearchLoadSimulation extends Simulation {
     var warmUp = searchLoop(10)
         .injectOpen(rampUsers(10).during(10));
 
-    var load = searchLoop(10)
+    var load = searchLoop(20)
         .injectOpen(rampUsers(20).during(40));
 
     var soak = searchLoop(100)
