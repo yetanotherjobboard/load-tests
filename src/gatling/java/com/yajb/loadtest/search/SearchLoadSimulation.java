@@ -22,16 +22,14 @@ public class SearchLoadSimulation extends Simulation {
     var warmUp = searchLoop("warm up", 10)
         .injectOpen(rampUsers(10).during(10));
 
-    var load = searchLoop("load", 20)
-        .injectOpen(rampUsers(30).during(40));
+    var load = searchLoop("load", 10)
+        .injectOpen(rampUsers(30).during(15));
 
-    var soak = searchLoop("soak", 100)
+    var soak = searchLoop("soak", 30)
         .injectOpen(rampUsers(100).during(100));
 
-    var traffic = warmUp.andThen(load);//.andThen(soak);
+    var traffic = warmUp.andThen(load).andThen(soak);
 
     setUp(traffic).protocols(target(API_BASE_URL));
   }
-
-
 }
