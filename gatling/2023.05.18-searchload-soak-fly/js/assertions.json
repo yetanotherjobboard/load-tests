@@ -1,7 +1,7 @@
 {
   "simulation": "com.yajb.loadtest.search.SearchLoadSimulation",
-  "simulationId": "searchloadsimulation-20230518190850758",
-  "start": 1684436932451,
+  "simulationId": "searchloadsimulation-20230519120844052",
+  "start": 1684498125922,
   "description": "",
   "scenarios": ["warm up", "load", "soak"],
   "assertions": [
