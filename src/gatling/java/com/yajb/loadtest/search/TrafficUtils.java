@@ -30,7 +30,7 @@ public interface TrafficUtils {
   ObjectMapper jackson = new ObjectMapper();
   String TENANT_TOKEN = getEncoder().encodeToString("reeljobs:reeljobs".getBytes(UTF_8));
 
-  static HttpProtocolBuilder target(String apiBaseUrl) {
+  static HttpProtocolBuilder httpTarget(String apiBaseUrl) {
     return http
       .baseUrl(apiBaseUrl)
       .header("yajb-tenant-token", TENANT_TOKEN)
