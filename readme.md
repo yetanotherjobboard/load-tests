@@ -60,7 +60,7 @@ Migration from fly.io to gcp/cloudrun in progress, so testing both.
     - soak: 15 000 requests, 100 users
 
 ``` java
-var warmUp = searchLoop("warm up", 10)
+    var warmUp = searchLoop("warm up", 10)
         .injectOpen(rampUsers(10).during(10));
 
     var load = searchLoop("load", 10)
@@ -99,20 +99,50 @@ var warmUp = searchLoop("warm up", 10)
     - average req/sec in soak phase: ~5
 
 ### conclusions
-- cloudrun might be fine for go-live & moderate traffic (up to 30 concurrent users)
-- we have to figure out the killer difference between fly/gcp during soak phase
-- i really like fly.io
 
-### next steps
+- cloudrun is throttling the traffic once it considers it excessive
+- possibly some kind of DoS protection
+- need to confirm if throttling occurs only if traffic is from a single IP
 
-- (dis)prove hypotesis: cloudrun is choking because of difference in postgres spec
-    - increase postgres RAM and rerun soak test
-- (dis)prove hypotesis: cloudrun is choking because of GC pauses (JVM settings are too low to support 100 concurrent users)
-    - setup prometheus&grafana (can be local) to scrape `/search-service/actuator/prometheus` and rerun soak test
-    - confirm GC pauses
-    - change JVM:MaxRAM setting and container RAM limit (e.g. double them) and rerun soak test
-    - explain why it is working fine on fly.io (are they overprovisioning for burst usage?)
-- retest with cloudrun's autoscaling
-    - tune max-instances
-    - tune concurrency factor
-         - this is tricky. I already tried playing with it a bit, but with puny, non-conclusive results)
+## 2023.10.03
+
+#### system under test:
+
+Same as before, cloudrun only:
+- search service spec:
+  - 512MB RAM
+  - shared-cpu-1x
+  - single instance
+  - JVM options: `-XX:MaxRAM=384m -XX:+UseSerialGC -Xmx128m -Xss256k`
+- postgres spec:
+  - ~0.6GB RAM
+  - shared-cpu-1x
+  - single instance
+
+#### test setup:
+
+- search loop : 5 sequential requests for subsequent pages fo results
+- slightly reduced specifications, to pinpoint the throttling:
+    - warmup: 125 requests, 5 users
+    - load: 500 requests, 10 users
+    - soak: 3750 requests, 30 users
+
+``` java
+    var warmUp = searchLoop("warm up", 5)
+        .injectOpen(rampUsers(5).during(20));
+
+    var load = searchLoop("load", 10)
+        .injectOpen(rampUsers(10).during(10));
+
+    var soak = searchLoop("soak", 30)
+        .injectOpen(rampUsers(25).during(100));
+
+    var traffic = warmUp.andThen(load).andThen(soak);
+```
+
+#### test results for warmup + load + soak:
+
+- details: [gatling report](gatling/2023.10.03-searchload-soak-gcp)
+- summary:
+    - execution time : 14 minutes
+    - throttling kicked in 3 minutes into soak phase, ~80 seconds after all 25 users ramped up - so seems not directly related to concurrent users
