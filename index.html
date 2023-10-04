@@ -1,24 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+  <meta charset="UTF-8" />
+  <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css"
+  />
   <title>Yajb Performance</title>
-  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
 </head>
 <style>
-.toastui-editor-contents { font-size : 1.2em ;}
-.toastui-editor-contents h2 { font-size : 200% ;}
-.toastui-editor-contents h1 { font-size : 220% ;}
-</style>
-<body onload="fetchContent()" style="margin:32px">
-<div id="content"></div>
-<script>
-  async function fetchContent() {
-    const response = await fetch("readme.md");
-    const markdown = await response.text();
-    new toastui.Editor({el: document.querySelector('#content')}).setMarkdown(markdown);
+  .sidebar {
+    background-color: #eeeeee
   }
+  .sidebar ul li a:hover {
+    background-color: #cccccc
+  }
+
+  .content {
+    padding: 0px;
+  }
+  .inset {
+    padding: 10px 5px 40px 15px;
+  }
+  .markdown-section {
+    padding: 30px;
+    max-width: 80%;
+  }
+</style>
+<body>
+<div id="app">Loading...</div>
+<script>
+  window.$docsify = {
+    executeScript: true,
+    loadSidebar: 'navi.md',
+    auto2top: true,
+    themeColor: '#007700'
+  };
 </script>
+<script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 </body>
 </html>
