@@ -9,9 +9,9 @@ advertgenerator:
   oidc:
     token-endpoint: https://yetanotherjobboard.eu.auth0.com/oauth/token
     client-id: kHOgCKg98UI66seLJ6ArQSkgDx3OyljC
-    client-secret: CHANGEME
+    client-secret: change-me
   user:
     username: trafficgenerator@yajb.com
-    password: CHANGEME
-#  max-adverts-to-generate: 10000
-  max-adverts-to-generate: 100
+    password: change-me
+  max-adverts-to-generate: 10000
+#  max-adverts-to-generate: 100

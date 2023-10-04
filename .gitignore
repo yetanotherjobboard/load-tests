@@ -1,3 +1,4 @@
+*.secret
 .localdb
 allure-results
 grafana-agent

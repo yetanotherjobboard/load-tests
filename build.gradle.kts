@@ -14,7 +14,7 @@ plugins {
 }
 
 val codeGenOutputDir = "$buildDir/generated/sources/clients"
-val openApiSpecVersion = "1.3"
+val openApiSpecVersion = "1.4"
 val requiredApis = listOf("config", "account", "search")
 
 fun openApiFileLocation(apiName: String) = "$buildDir/openapi-specs/$openApiSpecVersion/$apiName.yml"

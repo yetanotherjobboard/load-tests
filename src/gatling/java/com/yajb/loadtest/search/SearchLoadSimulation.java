@@ -16,14 +16,14 @@ public class SearchLoadSimulation extends Simulation {
     var apiBaseUrl = Env.valueOf(System.getProperty("target")).apiBaseUrl;
     System.out.println("SUT : " + apiBaseUrl);
 
-    var warmUp = searchLoop("warm up", 10)
-        .injectOpen(rampUsers(10).during(10));
+    var warmUp = searchLoop("warm up", 5)
+        .injectOpen(rampUsers(5).during(20));
 
     var load = searchLoop("load", 10)
-        .injectOpen(rampUsers(30).during(15));
+        .injectOpen(rampUsers(10).during(10));
 
     var soak = searchLoop("soak", 30)
-        .injectOpen(rampUsers(100).during(100));
+        .injectOpen(rampUsers(25).during(100));
 
     var traffic = warmUp.andThen(load).andThen(soak);
 

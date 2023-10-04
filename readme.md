@@ -9,6 +9,7 @@
 
 ### configure and run advert generator
 
+- set config_github_reviews_enabled: false on ee-service in staging
 - edit [application-staging.yml](src%2Fmain%2Fresources%2Fapplication-staging.yml) 
     - set `CHANGEME` secrets
     - set `max-adverts-to-generate`
@@ -17,7 +18,7 @@
 # run load tests
 
 ### run locally (requires jdk)
-- fly: `./gradlew generateSources gatlingRun -Dtarget=fly`
+- fly: `./gradlew generateSources gatlingRun -Dtarget=fly` (no longer exist)
 - gcp: `./gradlew generateSources gatlingRun -Dtarget=gcp`
 
 ### run in docker
