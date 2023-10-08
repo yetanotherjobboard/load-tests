@@ -17,4 +17,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: generateSources gatlingRun
+        env:
+          MAX_USERS: 10
+          MAX_LOOPS: 10
 
