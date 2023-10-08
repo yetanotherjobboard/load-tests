@@ -1,0 +1,20 @@
+name: Run Load Tests
+on:
+  - workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: run tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: generateSources gatlingRun
+

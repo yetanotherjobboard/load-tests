@@ -63,7 +63,6 @@ val codeGenTasks = requiredApis.map { api -> registerRestClientCodegenTask(api) 
 val generateSources by tasks.registering {
     group = "codegen"
     dependsOn(codeGenTasks)
-
 }
 
 sourceSets {

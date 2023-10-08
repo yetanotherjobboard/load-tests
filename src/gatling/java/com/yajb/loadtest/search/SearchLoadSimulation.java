@@ -6,15 +6,17 @@ import static com.yajb.loadtest.search.TrafficUtils.httpTarget;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 
 import io.gatling.javaapi.core.Simulation;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 
 @SuppressWarnings({"squid:S1171", "unused"})
 public class SearchLoadSimulation extends Simulation {
 
   {
-    var apiBaseUrl = Env.valueOf(System.getProperty("target")).apiBaseUrl;
-    System.out.println("SUT : " + apiBaseUrl);
+    var props = Props.get();
+    System.out.println(props);
 
     var warmUp = searchLoop("warm up", 5)
         .injectOpen(rampUsers(5).during(20));
@@ -22,19 +24,26 @@ public class SearchLoadSimulation extends Simulation {
     var load = searchLoop("load", 10)
         .injectOpen(rampUsers(10).during(10));
 
-    var soak = searchLoop("soak", 30)
-        .injectOpen(rampUsers(25).during(100));
+    var soak = searchLoop("soak", props.maxLoops)
+        .injectOpen(rampUsers(props.maxUsers).during(props.maxUsers));
 
     var traffic = warmUp.andThen(load).andThen(soak);
 
-    setUp(traffic).protocols(httpTarget(apiBaseUrl));
+    setUp(traffic).protocols(httpTarget(props.apiBaseUrl));
   }
 
-  @RequiredArgsConstructor
-  enum Env {
-    fly("https://yajb-api-gateway.fly.dev"),
-    gcp("https://api-gateway-tvexvi6w2q-uc.a.run.app");
 
-    final String apiBaseUrl;
+  record Props(
+      String apiBaseUrl,
+      int maxUsers,
+      int maxLoops) {
+
+    static Props get() {
+      return new Props(
+          "https://api-gateway-tvexvi6w2q-uc.a.run.app",
+          Optional.ofNullable(System.getenv("MAX_USERS")).map(Integer::parseInt).orElse(25),
+          Optional.ofNullable(System.getenv("MAX_LOOPS")).map(Integer::parseInt).orElse(30)
+      );
+    }
   }
 }

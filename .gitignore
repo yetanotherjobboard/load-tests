@@ -3,6 +3,7 @@
 allure-results
 grafana-agent
 ajcore*
+TescoRootCA.pem
 
 .gradle
 build/

@@ -18,11 +18,9 @@
 # run load tests
 
 ### run locally (requires jdk)
-- fly: `./gradlew generateSources gatlingRun -Dtarget=fly` (no longer exist)
-- gcp: `./gradlew generateSources gatlingRun -Dtarget=gcp`
+- `./gradlew generateSources gatlingRun`
 
 ### run in docker
-- `docker pull eclipse-temurin:17-jdk`
-- `docker run --rm -i -t -v $(pwd):/workspace --workdir /workspace eclipse-temurin:17-jdk bash`
-- paste command(s) from 'run locally' on container's prompt
+- `docker build . -t szczebel/yajb-load-tests:v1`
+- `docker run --rm -m 512m -e MAX_USERS=10 -e MAX_LOOPS=10 szczebel/yajb-load-tests:v1`
 
