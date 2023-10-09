@@ -18,7 +18,8 @@
 # run load tests
 
 ### run locally (requires jdk)
-- `./gradlew generateSources gatlingRun`
+- `./gradlew generateSources gatlingRun-com.yajb.loadtest.SearchLoadSimulation`
+- `./gradlew generateSources gatlingRun-com.yajb.loadtest.FetchStaticConfigSimulation`
 
 ### run in docker
 - `docker build . -t szczebel/yajb-load-tests:v1`

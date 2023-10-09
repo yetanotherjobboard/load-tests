@@ -98,5 +98,4 @@ tasks.withType<Test> {
 }
 
 gatling {
-
 }

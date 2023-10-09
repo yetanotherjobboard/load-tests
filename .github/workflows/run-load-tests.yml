@@ -2,13 +2,22 @@ name: Run Load Tests
 on:
   workflow_dispatch:
     inputs:
+      simulation:
+        required: true
+        description: test class
+        type: choice
+        options:
+          - SearchLoadSimulation
+          - FetchStaticConfigSimulation
       max-users:
         required: true
         description: max users
+        type: number
         default: 10
       max-loops:
         required: true
         description: max loops
+        type: number
         default: 10
 jobs:
   test:
@@ -25,7 +34,7 @@ jobs:
       - name: run tests
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: generateSources gatlingRun
+          arguments: generateSources gatlingRun-com.yajb.loadtest.${{github.event.inputs.simulation}}
         env:
           MAX_USERS: ${{ github.event.inputs.max-users }}
           MAX_LOOPS: ${{ github.event.inputs.max-loops }}

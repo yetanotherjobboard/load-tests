@@ -1,4 +1,4 @@
-package com.yajb.loadtest.search;
+package com.yajb.loadtest;
 
 import static com.yajb.loadtest.advertgenerator.AdvertBuilder.Randomizer.pickOne;
 import static io.gatling.javaapi.core.CoreDsl.StringBody;
@@ -39,6 +39,7 @@ public interface TrafficUtils {
 
   //verify if it matches  what's in SearchApi.java (local variable)
   String SEARCH_PATH = "/api/search/job-advert/query";
+  String STATIC_CONFIG_PATH = "/api/static-config";
 
   Iterator<Map<String, Object>> RANDOM_QUERY_GENERATOR = Stream
       .generate(() -> Map.of("query", (Object) randomQuery()))
@@ -54,7 +55,6 @@ public interface TrafficUtils {
       .exec(callSearch(3)).pause(MIN_PAUSE_BETWEEN_SEARCHES, MAX_PAUSE_BETWEEN_SEARCHES)
       .exec(callSearch(4)).pause(MIN_PAUSE_BETWEEN_SEARCHES, MAX_PAUSE_BETWEEN_SEARCHES)
       .exec(callSearch(5)).pause(MIN_PAUSE_BETWEEN_SEARCHES, MAX_PAUSE_BETWEEN_SEARCHES)
-
       ;
 
   static ScenarioBuilder searchLoop(String desc, int repeatTimes) {
@@ -63,12 +63,26 @@ public interface TrafficUtils {
         .repeat(repeatTimes)
         .on(BROWSE_FEW_PAGES_OF_SEARCH_RESULTS);
   }
+
+  static ScenarioBuilder fetchStaticConfigLoop(String desc, int repeatTimes) {
+    return CoreDsl
+        .scenario(desc)
+        .repeat(repeatTimes)
+        .on(CoreDsl
+            .exec(fetchStaticConfig())
+            .pause(MIN_PAUSE_BETWEEN_SEARCHES, MAX_PAUSE_BETWEEN_SEARCHES));
+  }
   static HttpRequestActionBuilder callSearch(int pageNumber) {
     return http("search")
         .post(SEARCH_PATH)
         .body(StringBody("#{query}"))
         .queryParam("pageSize", 12)
         .queryParam("pageNumber", pageNumber);
+  }
+
+  static HttpRequestActionBuilder fetchStaticConfig() {
+    return http("static-config")
+        .get(STATIC_CONFIG_PATH);
   }
 
   @SneakyThrows
