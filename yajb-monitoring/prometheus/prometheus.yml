@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 1s
+  scrape_timeout: 1s
+scrape_configs:
+  - job_name: search-service
+    honor_timestamps: true
+    metrics_path: /search-service/actuator/prometheus
+    scheme: https
+    static_configs:
+      - targets:
+          - search-service-tvexvi6w2q-uc.a.run.app

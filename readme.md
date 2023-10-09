@@ -17,11 +17,15 @@
 
 # run load tests
 
+### spin up monitoring (optional)
+- `docker compose -f yajb-monitoring/compose.yml up`
+- http://localhost:3000 (creds: admin/grafana)
+
 ### run locally (requires jdk)
 - `./gradlew generateSources gatlingRun-com.yajb.loadtest.SearchLoadSimulation`
 - `./gradlew generateSources gatlingRun-com.yajb.loadtest.FetchStaticConfigSimulation`
 
 ### run in docker
-- `docker build . -t szczebel/yajb-load-tests:v1`
-- `docker run --rm -m 512m -e MAX_USERS=10 -e MAX_LOOPS=10 szczebel/yajb-load-tests:v1`
+- `docker build . -t yajb-load-tests`
+- `docker run --rm -m 512m -e MAX_USERS=10 -e MAX_LOOPS=10 yajb-load-tests`
 
