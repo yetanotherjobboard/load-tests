@@ -29,4 +29,10 @@ jobs:
         env:
           MAX_USERS: ${{ github.event.inputs.max-users }}
           MAX_LOOPS: ${{ github.event.inputs.max-loops }}
+      - name: upload test reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: gatling-${{ github.run_number }}
+          path: |
+            build/reports/gatling
 
