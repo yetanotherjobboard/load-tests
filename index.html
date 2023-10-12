@@ -1,46 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>YAJB performance</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
   <meta charset="UTF-8" />
-  <link
-      rel="stylesheet"
-      href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css"
-  />
-  <title>Yajb Performance</title>
-</head>
-<style>
-  .sidebar {
-    background-color: #eeeeee
-  }
-  .sidebar ul li a:hover {
-    background-color: #cccccc
-  }
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+  <style>
+    :root {
+      --link-color:#7777ee;
+      --link-text-decoration : none;
+      --link-text-decoration--hover : underline;
+    }
 
-  .content {
-    padding: 0px;
-  }
-  .inset {
-    padding: 10px 5px 40px 15px;
-  }
-  .markdown-section {
-    padding: 30px;
-    max-width: 80%;
-  }
-</style>
+  </style>
+</head>
 <body>
 <div id="app">Loading...</div>
 <script>
   window.$docsify = {
+    name: 'YAJB performance',
     basePath: '/load-tests/',
     executeScript: true,
     loadSidebar: 'navi.md',
     auto2top: true,
-    themeColor: '#007700'
+    themeColor: '#7777ee',
+    //maxLevel   : 3,
+    //subMaxLevel: 3,
   };
 </script>
-<script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
 </body>
 </html>
